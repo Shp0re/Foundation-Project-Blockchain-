@@ -17,6 +17,8 @@ public class Block {
         this.timeStamp = System.currentTimeMillis();
         this.hash = calculateHash();
         this.data = data;
+        this.blockIndex = 0;
+        this.previousHash = "";
     }
 
     // hash creation method

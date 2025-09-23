@@ -4,9 +4,11 @@ import java.util.List;
 
 public class BlockchainImpl implements Blockchain {
 
+    private List<Block> blockchain;
+
     @Override
     public List<Block> getBlocks() {
-        return List.of();
+        return blockchain;
     }
 
     @Override

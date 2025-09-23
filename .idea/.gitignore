@@ -1,0 +1,9 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# ignore all files with .iml extension
+*.iml
+# ignore .idea folder
+.idea/

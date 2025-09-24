@@ -1,14 +1,13 @@
 package main.java.taxreturns.blockchain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockchainImpl implements Blockchain {
 
-
-    private List<Block> blockchain;
-
-    public BlockchainImpl(List<Block> blockchain) {
-        this.blockchain = blockchain;
+    List<Block> blockchain;
+    public BlockchainImpl() {
+        this.blockchain = new ArrayList<Block>();
     }
 
     @Override
@@ -17,9 +16,22 @@ public class BlockchainImpl implements Blockchain {
     }
 
     @Override
+    public String string(){
+        String result = "";
+
+        for (Block block : blockchain){
+            result += block.toString() + "\n";
+        }
+
+        return result;
+    }
+
+    @Override
     public void addBlock(Block newBlock) {
         newBlock.setBlockIndex(this.blockchain.size());
-        newBlock.setPreviousHash(this.getLatestBlock().getHash());
+        if (!(this.getLatestBlock() == null)) {
+            newBlock.setPreviousHash(this.getLatestBlock().getHash());
+        }
         this.blockchain.add(newBlock);
     }
 
@@ -37,8 +49,8 @@ public class BlockchainImpl implements Blockchain {
 
     @Override
     public Block getLatestBlock() {
-        Block latestBlock = this.blockchain.get(this.blockchain.size() - 1);
 
-        return latestBlock;
+        return this.blockchain.isEmpty() ? null : this.blockchain.get(this.blockchain.size() - 1);
+
     }
 }

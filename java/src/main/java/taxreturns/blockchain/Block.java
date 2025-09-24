@@ -15,16 +15,17 @@ public class Block {
     public Block(long digitalSignature, List<String> data) {
         this.digitalSignature = digitalSignature;
         this.timeStamp = System.currentTimeMillis();
-        this.hash = calculateHash();
         this.data = data;
+        this.hash = calculateHash();
         this.blockIndex = 0;
         this.previousHash = "";
     }
 
     // hash creation method
     public String calculateHash() {
-        String calculatedHash = String.valueOf(digitalSignature) + String.valueOf(timeStamp) + previousHash + data.toString();
-        return String.valueOf(calculatedHash.hashCode());
+
+        return String.valueOf(digitalSignature) + String.valueOf(timeStamp) + data.toString().hashCode();
+
     }
 
     // Alter hash method
@@ -79,5 +80,18 @@ public class Block {
 
     public void setPreviousHash(String previousHash) {
         this.previousHash = previousHash;
+    }
+
+    // to string method
+    @Override
+    public String toString() {
+        return "Block{" +
+                "previousHash='" + previousHash + '\'' +
+                ", data=" + data +
+                ", hash='" + hash + '\'' +
+                ", timeStamp=" + timeStamp +
+                ", digitalSignature=" + digitalSignature +
+                ", blockIndex=" + blockIndex +
+                '}';
     }
 }

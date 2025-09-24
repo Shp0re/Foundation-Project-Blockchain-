@@ -1,4 +1,4 @@
-package blockchain;
+package main.java.taxreturns.blockchain;
 
 import java.util.List;
 
@@ -32,13 +32,13 @@ public class BlockchainImpl implements Blockchain {
                 return false;
             }
         }
-
         return true;
     }
 
     @Override
     public Block getLatestBlock() {
         Block latestBlock = this.blockchain.get(this.blockchain.size() - 1);
+
         return latestBlock;
     }
 }

@@ -1,4 +1,4 @@
-package blockchain;
+package main.java.taxreturns.blockchain;
 
 import java.util.List;
 

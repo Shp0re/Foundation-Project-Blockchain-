@@ -1,5 +1,7 @@
 package SmartContract;
 
+import SmartContract.Conditions.Condition;
+import SmartContract.SmartScripts.SmartScripts;
 import main.java.taxreturns.blockchain.Blockchain;
 
 import java.util.List;

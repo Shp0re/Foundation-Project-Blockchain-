@@ -1,4 +1,4 @@
-package SmartContract;
+package SmartContract.SmartScripts;
 
 import main.java.taxreturns.blockchain.Blockchain;
 

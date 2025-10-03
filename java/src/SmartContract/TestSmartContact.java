@@ -2,6 +2,7 @@ package SmartContract;
 
 import SmartContract.Conditions.Condition;
 import SmartContract.Conditions.TimeCondition;
+import SmartContract.SmartScripts.PrintScript;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
@@ -36,7 +37,7 @@ public class TestSmartContact {
 
         List<SmartFunctions> smartFunctions = List.of(printIfAfterJan1st99);
 
-        Contract contract = new Contract(29328102,testData,smartFunctions);
+        Contract contract = new Contract(29328102,testData,smartFunctions,null);
 
         contract.run(blockchain);
 

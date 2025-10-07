@@ -16,7 +16,7 @@ public class BlockchainImpl implements Blockchain {
     }
 
     @Override
-    public String string(){
+    public String toString(){
         String result = "";
 
         for (Block block : blockchain){
@@ -27,8 +27,38 @@ public class BlockchainImpl implements Blockchain {
     }
 
     @Override
+    public String output() {
+        String result = "";
+
+        result += "BLOCKCHAIN : " + blockchain.size() + " Blocks \n";
+        for (Block block : blockchain){
+            result += block.toString() + "\n";
+        }
+
+        return result;
+    }
+
+    @Override
+    public void editBlock(String hash, List<String> newTestData) {
+        Block block = getBlock(hash);
+
+        block.setData(newTestData);
+        block.changeHash();
+    }
+
+    @Override
+    public Block getBlock(String hash) {
+        for (Block block : blockchain){
+            if (block.getHash().equals(hash)){
+                return block;
+            }
+        };
+        return null;
+    }
+
+    @Override
     public void addBlock(Block newBlock) {
-        newBlock.setBlockIndex(this.blockchain.size());
+        newBlock.setBlockIndex(this.blockchain.size()+1);
         if (!(this.getLatestBlock() == null)) {
             newBlock.setPreviousHash(this.getLatestBlock().getHash());
         }
@@ -41,6 +71,7 @@ public class BlockchainImpl implements Blockchain {
             Block block = blockchain.get(i);
             Block previousBlock = blockchain.get(i - 1);
             if (!block.getPreviousHash().equals(previousBlock.getHash())) {
+                System.out.println("Block " + (i) + " is not referenced");
                 return false;
             }
         }

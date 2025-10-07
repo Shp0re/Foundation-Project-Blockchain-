@@ -94,4 +94,13 @@ public class Block {
                 ", blockIndex=" + blockIndex +
                 '}';
     }
+
+    public String output() {
+        return  "\nPrevious Hash = '" + previousHash + '\'' +
+                "\nData = " + data +
+                "\nHash = '" + hash + '\'' +
+                "\nTime Stamp = " + timeStamp +
+                "\nDigital Signature = " + digitalSignature +
+                "\nBlock Index = " + blockIndex;
+    }
 }

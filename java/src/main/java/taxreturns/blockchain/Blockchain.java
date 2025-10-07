@@ -12,6 +12,12 @@ public interface Blockchain {
 
     Block getLatestBlock();
 
-    String string();
+    String toString();
+
+    String output();
+
+    void editBlock(String hash, List<String> newTestData);
+
+    Block getBlock(String hash);
 
 }

@@ -40,5 +40,14 @@ public class SmartFunctions {
         }
     }
 
+    public void output(){
+        System.out.println("This smart function contains the following conditions:\n");
+        for (Condition condition : conditions){
+            System.out.println(condition.name() + ": " + condition.output());
+        }
+        System.out.println("And the following script:\n");
+        System.out.println(script.name() + ": " + script.output());
+    }
+
 
 }

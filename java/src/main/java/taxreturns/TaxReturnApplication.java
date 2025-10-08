@@ -58,28 +58,49 @@ public class TaxReturnApplication {
         System.out.println("Block has been successfully edited\n");
         System.out.println(blockchain.output());
 
-        System.out.println("Is chain valid? " + blockchain.isChainValid());
+        System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
 
-        // SMART CONTRACT IMPLEMENTATION
+         //SMART CONTRACT IMPLEMENTATION
 
-//        TimeCondition AfterJan1st99 = null;
-//
-//        try {
-//            AfterJan1st99 = new TimeCondition("01-01-1999 00:00:00");
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//        SmartScripts printScript = new PrintScript();
-//
-//        List<Condition> conditions = List.of(AfterJan1st99);
-//
-//        SmartFunctions printIfAfterJan1st99 = new SmartFunctions(conditions,printScript);
-//
-//        List<SmartFunctions> smartFunctions = List.of(printIfAfterJan1st99);
-//
-//        Contract contract = new Contract(29328102,testData,smartFunctions,null);
-//
-//        contract.run(blockchain);
+        System.out.println("Smart contract creation steps\n");
+
+        TimeCondition AfterJan1st99 = null;
+
+        System.out.println("Create conditions\n");
+
+        try {
+            AfterJan1st99 = new TimeCondition("01-01-1999 00:00:00");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("This condition: " + AfterJan1st99.output());
+
+        System.out.println("Create script\n");
+
+        SmartScripts printScript = new PrintScript();
+
+        System.out.println("This script: " + printScript.output());
+
+        List<Condition> conditions = List.of(AfterJan1st99);
+
+        System.out.println("Create SmartFunction\n");
+
+        SmartFunctions printIfAfterJan1st99 = new SmartFunctions(conditions,printScript);
+
+        List<SmartFunctions> smartFunctions = List.of(printIfAfterJan1st99);
+
+        printIfAfterJan1st99.output();
+
+        System.out.println("Create smart contract\n");
+
+        Contract contract = new Contract(29328102,testData,smartFunctions,null);
+
+        blockchain.addBlock(contract);
+
+        System.out.println("Run contract\n");
+
+        contract.run(blockchain);
 
     }
 

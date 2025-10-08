@@ -25,5 +25,15 @@ public class ReadScript implements SmartScripts {
                 }
             }
         }
+
+    @Override
+    public String output() {
+        return "returns Blockchain only containing blocks that contain specified data";
+    }
+
+    @Override
+    public String name() {
+        return "ReadScript";
+    }
 }
 

@@ -9,11 +9,22 @@ import java.util.Date;
 public class TimeCondition implements Condition {
 
     private final long timeAfter;
+    private String timeString;
 
     public TimeCondition(String time) throws ParseException {
+        timeString = time;
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
         Date date = sdf.parse(time);
         timeAfter = date.getTime();
+    }
+
+    @Override
+    public String name() {
+        return "TimeCondition";
+    }
+
+    public String output() {
+        return ("Check if the latest block was created after " + timeString + "\n");
     }
 
     public Boolean check(Blockchain blockchain) {

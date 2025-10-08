@@ -7,4 +7,14 @@ public class PrintScript  implements SmartScripts {
     public void run(Blockchain blockchain) {
         System.out.println(blockchain.toString());
     }
+
+    @Override
+    public String output() {
+        return "Print out all blocks in the blockchain\n";
+    }
+
+    @Override
+    public String name() {
+        return "PrintScript";
+    }
 }

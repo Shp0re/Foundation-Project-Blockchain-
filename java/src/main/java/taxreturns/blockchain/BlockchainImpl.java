@@ -1,13 +1,17 @@
 package main.java.taxreturns.blockchain;
 
+import Node.NodeGroup;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlockchainImpl implements Blockchain {
 
+    NodeGroup nodeGroup;
     List<Block> blockchain;
-    public BlockchainImpl() {
+    public BlockchainImpl(NodeGroup nodeGroup) {
         this.blockchain = new ArrayList<Block>();
+        this.nodeGroup = nodeGroup;
     }
 
     @Override
@@ -58,11 +62,13 @@ public class BlockchainImpl implements Blockchain {
 
     @Override
     public void addBlock(Block newBlock) {
-        newBlock.setBlockIndex(this.blockchain.size()+1);
-        if (!(this.getLatestBlock() == null)) {
-            newBlock.setPreviousHash(this.getLatestBlock().getHash());
+        if (nodeGroup.checkNewBlock(newBlock)) {
+            newBlock.setBlockIndex(this.blockchain.size());
+            if (!(this.getLatestBlock() == null)) {
+                newBlock.setPreviousHash(this.getLatestBlock().getHash());
+            }
+            this.blockchain.add(newBlock);
         }
-        this.blockchain.add(newBlock);
     }
 
     @Override

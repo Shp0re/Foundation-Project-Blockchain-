@@ -1,5 +1,7 @@
 package main.java.taxreturns;
 
+import Node.Node;
+import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
@@ -12,13 +14,17 @@ import main.java.taxreturns.smartContract.smartScripts.SmartScripts;
 
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaxReturnApplication {
 
     public static void main(String[] args) {
 
-        Blockchain blockchain = new BlockchainImpl();
+        List<Node> nodes = new ArrayList<>();
+        NodeGroup nodeGroup = new NodeGroup(nodes);
+
+        Blockchain blockchain = new BlockchainImpl(nodeGroup);
 
         System.out.println("Empty Blockchain Created \n");
 

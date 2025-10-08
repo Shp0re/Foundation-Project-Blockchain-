@@ -1,4 +1,4 @@
-package SmartContract.Conditions;
+package main.java.taxreturns.smartContract.conditions;
 
 import main.java.taxreturns.blockchain.Blockchain;
 

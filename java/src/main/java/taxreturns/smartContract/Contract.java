@@ -1,6 +1,5 @@
-package SmartContract;
+package main.java.taxreturns.smartContract;
 
-import SmartContract.Conditions.Condition;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 
@@ -10,7 +9,7 @@ public class Contract extends Block {
 
     private final List<SmartFunctions> SmartFunctions;
 
-    public Contract(long digitalSignature, List<String> data, List<SmartFunctions> smartFunctions,List<Modifiers> modifiers) {
+    public Contract(long digitalSignature, List<String> data, List<SmartFunctions> smartFunctions, List<Modifiers> modifiers) {
         super(digitalSignature, data);
         SmartFunctions = smartFunctions;
     }

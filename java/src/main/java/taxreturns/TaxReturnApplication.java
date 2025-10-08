@@ -18,6 +18,7 @@ public class TaxReturnApplication {
 
     public static void main(String[] args) {
 
+        // BlOCKCHAIN VISUALISATION
         Blockchain blockchain = new BlockchainImpl();
 
         System.out.println("Empty Blockchain Created \n");
@@ -60,18 +61,18 @@ public class TaxReturnApplication {
 
         System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
 
-         //SMART CONTRACT IMPLEMENTATION
+         //SMART CONTRACT VISUALISATION
 
         System.out.println("Smart contract creation steps\n");
 
-        TimeCondition AfterJan1st99 = null;
+        TimeCondition AfterJan1st99;
 
         System.out.println("Create conditions\n");
 
         try {
             AfterJan1st99 = new TimeCondition("01-01-1999 00:00:00");
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid date format");
         }
 
         System.out.println("This condition: " + AfterJan1st99.output());

@@ -23,6 +23,4 @@ public class Contract extends Block {
             smartFunctions.run(blockchain);
         }
     }
-
-
 }

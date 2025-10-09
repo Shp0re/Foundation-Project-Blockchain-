@@ -11,7 +11,7 @@ public class TimeCondition implements Condition {
     private final long timeAfter;
     private String timeString;
 
-    public TimeCondition(String time) throws ParseException {
+    public TimeCondition(String time) throws Exception {
         timeString = time;
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
         Date date = sdf.parse(time);

@@ -43,7 +43,6 @@ public class BlockchainImpl implements Blockchain {
         Block block = getBlock(hash);
 
         block.setData(newTestData);
-        block.changeHash();
     }
 
     @Override

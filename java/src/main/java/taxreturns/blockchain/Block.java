@@ -72,6 +72,7 @@ public class Block {
 
     public void setData(List<String> data) {
         this.data = data;
+        this.hash = calculateHash();
     }
 
     public String getPreviousHash() {

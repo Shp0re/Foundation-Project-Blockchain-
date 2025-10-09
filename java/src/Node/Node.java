@@ -1,8 +1,10 @@
 package Node;
 
+import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,9 +15,9 @@ public class Node {
     private float NumVotesFor;
     private List<Float> trust;
 
-    public Node(Blockchain blockchain, int NodeNum) {
-        localBlockchain = blockchain;
-        this.NodeNum = NodeNum;
+    public Node() {
+        localBlockchain = new BlockchainImpl(new NodeGroup());
+        this.NodeNum = 0;
         trust = RandomTrust();
         TokensToVoteWith = 0;
         NumVotesFor = 0;
@@ -23,6 +25,15 @@ public class Node {
 
     public void setTokensToVoteWith(float tokensToVoteWith) {
         TokensToVoteWith = tokensToVoteWith;
+    }
+
+    public Blockchain getLocalBlockchain() {
+        return localBlockchain;
+    }
+
+    public void setNodeNum(int nodeNum) {
+        NodeNum = nodeNum;
+        trust = RandomTrust();
     }
 
     public void setNumVotesFor(float numVotesFor) {
@@ -57,16 +68,18 @@ public class Node {
         if(Trust.size() == NodeNum){
             float trustToatal = 0;
             for(int i = 0; i < NodeNum; i++){
-                trustToatal = trust.get(i) + trustToatal;
+                trustToatal = Trust.get(i) + trustToatal;
             }
-            if(trustToatal == 1){
+            if(trustToatal < 1){
                 return true;
             }
             else{
+                System.out.println("Trust wrong total. should be: 1 actual: " + trustToatal );
                 return false;
             }
         }
         else {
+            System.out.println("Trust wrong length. should be:" + NodeNum + " actual: " + Trust.size() );
             return false;
         }
     }
@@ -83,5 +96,32 @@ public class Node {
             postion++;
         }
         return nodes;
+    }
+
+    public boolean isChainValid(Blockchain blockchain) {
+        for (int i = 1; i < blockchain.size(); i++) {
+            Block block = blockchain.getBlockIndex(i);
+            Block previousBlock = blockchain.getBlockIndex(i - 1);
+            if (!block.getPreviousHash().equals(previousBlock.getHash())) {
+                System.out.println("Block " + (i) + " is not referenced");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isNewBlockValid(Block newblock) {
+        Blockchain tempChain = localBlockchain;
+        newblock.setBlockIndex(tempChain.size());
+        if (!(tempChain.getLatestBlock() == null)) {
+            newblock.setPreviousHash(tempChain.getLatestBlock().getHash());
+        }
+        tempChain.getBlocks().add(newblock);
+        if (isChainValid(tempChain)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -21,8 +21,11 @@ public class TaxReturnApplication {
 
     public static void main(String[] args) {
 
-        List<Node> nodes = new ArrayList<>();
-        NodeGroup nodeGroup = new NodeGroup(nodes);
+        NodeGroup nodeGroup = new NodeGroup();
+        nodeGroup.addNode(new Node());
+        nodeGroup.addNode(new Node());
+        nodeGroup.addNode(new Node());
+        nodeGroup.addNode(new Node());
 
         Blockchain blockchain = new BlockchainImpl(nodeGroup);
 
@@ -47,7 +50,7 @@ public class TaxReturnApplication {
 
         System.out.println(blockchain.output());
 
-        System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
+        System.out.println("Is chain valid? " + nodeGroup.ValidateBlockchain() + "\n");
 
         System.out.println("Editing a block to have new test data");
 
@@ -64,7 +67,7 @@ public class TaxReturnApplication {
         System.out.println("Block has been successfully edited\n");
         System.out.println(blockchain.output());
 
-        System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
+        //System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
 
          //SMART CONTRACT IMPLEMENTATION
 

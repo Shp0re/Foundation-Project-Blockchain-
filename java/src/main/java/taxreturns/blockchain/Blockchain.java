@@ -8,8 +8,6 @@ public interface Blockchain {
 
     void addBlock(Block newBlock);
 
-    boolean isChainValid();
-
     Block getLatestBlock();
 
     String toString();
@@ -20,4 +18,7 @@ public interface Blockchain {
 
     Block getBlock(String hash);
 
+    int size();
+
+    Block getBlockIndex(int i);
 }

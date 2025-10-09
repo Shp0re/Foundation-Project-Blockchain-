@@ -61,6 +61,16 @@ public class BlockchainImpl implements Blockchain {
     }
 
     @Override
+    public int size() {
+        return blockchain.size();
+    }
+
+    @Override
+    public Block getBlockIndex(int i) {
+        return blockchain.get(i);
+    }
+
+    @Override
     public void addBlock(Block newBlock) {
         if (nodeGroup.checkNewBlock(newBlock)) {
             newBlock.setBlockIndex(this.blockchain.size());
@@ -71,18 +81,6 @@ public class BlockchainImpl implements Blockchain {
         }
     }
 
-    @Override
-    public boolean isChainValid() {
-        for (int i = 1; i < blockchain.size(); i++) {
-            Block block = blockchain.get(i);
-            Block previousBlock = blockchain.get(i - 1);
-            if (!block.getPreviousHash().equals(previousBlock.getHash())) {
-                System.out.println("Block " + (i) + " is not referenced");
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public Block getLatestBlock() {

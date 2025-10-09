@@ -3,6 +3,7 @@ package Node;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -13,18 +14,35 @@ public class NodeGroup {
     private Blockchain blockchain;
     private int NodeNum;
 
-    public NodeGroup(List<Node> nodes) {
-        nodes = nodes;
+    public NodeGroup() {
+        nodes = new ArrayList<Node>();
         NodeNum = nodes.size();
     }
 
     public void addNode(Node node){
         nodes.add(node);
         NodeNum++;
+        for(Node n : nodes){
+            n.setNodeNum(NodeNum);
+        }
+    }
+
+    public boolean ValidateBlockchain(){
+        for (Node witness : witnesses){
+            if (!witness.isChainValid(witness.getLocalBlockchain())){
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean checkNewBlock(Block newBlock) {
         setWitnesses();
+        for (Node witness : witnesses){
+            if (!witness.isNewBlockValid(newBlock)){
+                return false;
+            }
+        }
         return true;
     }
 
@@ -39,4 +57,5 @@ public class NodeGroup {
     private void Sortnodes() {
         Collections.sort(nodes, new NumOfVotesComparator());
     }
+
 }

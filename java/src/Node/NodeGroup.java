@@ -2,6 +2,7 @@ package Node;
 
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
+import main.java.taxreturns.blockchain.BlockchainImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,10 +17,20 @@ public class NodeGroup {
 
     public NodeGroup() {
         nodes = new ArrayList<Node>();
+        blockchain = new BlockchainImpl(this);
         NodeNum = nodes.size();
     }
 
-    public void addNode(Node node){
+    public void setBlockchain(Blockchain blockchain) {
+        this.blockchain = blockchain;
+        for (Node node : nodes) {
+            node.setLocalBlockchain(blockchain);
+        }
+    }
+
+    public void addNode(Node node, int index){
+        node.setindex(index);
+        node.setLocalBlockchain(blockchain);
         nodes.add(node);
         NodeNum++;
         for(Node n : nodes){
@@ -43,7 +54,25 @@ public class NodeGroup {
                 return false;
             }
         }
+        rewardWitnesses();
+        rewardVoters();
         return true;
+    }
+
+    private void rewardWitnesses(){
+        for (Node witness : witnesses) {
+            nodes.get(witness.getindex()).increaseTokensToVoteWith((float) 0.5);
+        }
+    }
+
+    private void rewardVoters(){
+        for (Node node : nodes) {
+            for(Node witness : witnesses) {
+                if (node.getTopvotes() == witness.getindex()){
+                    node.increaseTokensToVoteWith((float) 0.25);
+                }
+            }
+        }
     }
 
     private void setWitnesses() {

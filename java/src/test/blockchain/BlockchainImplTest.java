@@ -1,5 +1,7 @@
 package test.blockchain;
 
+import Node.Node;
+import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.BlockchainImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,14 +14,23 @@ import java.util.List;
 @DisplayName("Blockchain Implementation Test")
 class BlockchainImplTest {
 
-    BlockchainImpl blockchain = new BlockchainImpl();
+    BlockchainImpl blockchain;
     Block testBlock;
     Block testBlock2;
     List<String> testData;
     List<String> testData2;
+    NodeGroup testNodeGroup;
 
     @BeforeEach
     void init() {
+
+        testNodeGroup = new NodeGroup();
+        testNodeGroup.addNode(new Node(),0);
+        testNodeGroup.addNode(new Node(),1);
+        testNodeGroup.addNode(new Node(),2);
+        testNodeGroup.addNode(new Node(),3);
+
+        blockchain = new BlockchainImpl(testNodeGroup);
 
        // Anything needing to be done at the start
         testData = List.of("ImportantInformation", "SensitiveData", "ClassifiedDocuments");
@@ -34,7 +45,7 @@ class BlockchainImplTest {
 
         blockchain.addBlock(testBlock);
 
-        assertTrue(blockchain.isChainValid());
+        assertTrue(testNodeGroup.ValidateBlockchain());
     }
 
     @Test

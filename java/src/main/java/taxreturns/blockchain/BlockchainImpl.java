@@ -77,6 +77,7 @@ public class BlockchainImpl implements Blockchain {
                 newBlock.setPreviousHash(this.getLatestBlock().getHash());
             }
             this.blockchain.add(newBlock);
+            nodeGroup.setBlockchain(this);
         }
     }
 

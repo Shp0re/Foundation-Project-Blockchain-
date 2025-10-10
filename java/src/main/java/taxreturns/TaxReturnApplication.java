@@ -22,10 +22,10 @@ public class TaxReturnApplication {
     public static void main(String[] args) {
 
         NodeGroup nodeGroup = new NodeGroup();
-        nodeGroup.addNode(new Node());
-        nodeGroup.addNode(new Node());
-        nodeGroup.addNode(new Node());
-        nodeGroup.addNode(new Node());
+        nodeGroup.addNode(new Node(),0);
+        nodeGroup.addNode(new Node(),1);
+        nodeGroup.addNode(new Node(),2);
+        nodeGroup.addNode(new Node(),3);
 
         Blockchain blockchain = new BlockchainImpl(nodeGroup);
 
@@ -79,7 +79,7 @@ public class TaxReturnApplication {
 
         try {
             AfterJan1st99 = new TimeCondition("01-01-1999 00:00:00");
-        } catch (ParseException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 

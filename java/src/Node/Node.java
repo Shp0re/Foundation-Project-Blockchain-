@@ -10,6 +10,7 @@ import java.util.Random;
 
 public class Node {
     private Blockchain localBlockchain;
+    private int index;
     private int NodeNum;
     private float TokensToVoteWith;
     private float NumVotesFor;
@@ -19,7 +20,7 @@ public class Node {
         localBlockchain = new BlockchainImpl(new NodeGroup());
         this.NodeNum = 0;
         trust = RandomTrust();
-        TokensToVoteWith = 0;
+        TokensToVoteWith = 1;
         NumVotesFor = 0;
     }
 
@@ -29,6 +30,10 @@ public class Node {
 
     public Blockchain getLocalBlockchain() {
         return localBlockchain;
+    }
+
+    public void setLocalBlockchain(Blockchain localBlockchain) {
+        this.localBlockchain = localBlockchain;
     }
 
     public void setNodeNum(int nodeNum) {
@@ -98,6 +103,17 @@ public class Node {
         return nodes;
     }
 
+    public int getTopvotes(){
+        int topvotes = 0;
+        int topvoteIndex = 0;
+        for(int i = 0; i < NodeNum; i++){
+            if (trust.get(i) > topvotes){
+                topvoteIndex = i;
+            }
+        }
+        return topvoteIndex;
+    }
+
     public boolean isChainValid(Blockchain blockchain) {
         for (int i = 1; i < blockchain.size(); i++) {
             Block block = blockchain.getBlockIndex(i);
@@ -123,5 +139,17 @@ public class Node {
         else {
             return false;
         }
+    }
+
+    public void setindex(int index) {
+        this.index = index;
+    }
+
+    public int getindex() {
+        return index;
+    }
+
+    public void increaseTokensToVoteWith(float v) {
+        TokensToVoteWith += v;
     }
 }

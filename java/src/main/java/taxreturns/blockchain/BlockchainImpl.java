@@ -72,12 +72,7 @@ public class BlockchainImpl implements Blockchain {
     @Override
     public void addBlock(Block newBlock) {
         if (nodeGroup.checkNewBlock(newBlock)) {
-            newBlock.setBlockIndex(this.blockchain.size());
-            if (!(this.getLatestBlock() == null)) {
-                newBlock.setPreviousHash(this.getLatestBlock().getHash());
-            }
-            this.blockchain.add(newBlock);
-            nodeGroup.setBlockchain(this);
+            this.blockchain = nodeGroup.getBlockchain().getBlocks();
         }
     }
 

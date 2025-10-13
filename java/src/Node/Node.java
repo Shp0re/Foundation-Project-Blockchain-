@@ -133,17 +133,17 @@ public class Node {
     }
 
     public boolean isNewBlockValid(Block newblock) {
-        Blockchain tempChain = localBlockchain;
-        newblock.setBlockIndex(tempChain.size());
-        if (!(tempChain.getLatestBlock() == null)) {
-            newblock.setPreviousHash(tempChain.getLatestBlock().getHash());
+        newblock.setBlockIndex(localBlockchain.size());
+        if (!(localBlockchain.getLatestBlock() == null)) {
+            newblock.setPreviousHash(localBlockchain.getLatestBlock().getHash());
         }
-        tempChain.getBlocks().add(newblock);
-        if (isChainValid(tempChain)) {
+        localBlockchain.getBlocks().add(newblock);
+        if (isChainValid(localBlockchain)) {
             NodesValidated.add(newblock.getDigitalSignature());
             return true;
         }
         else {
+            localBlockchain.getBlocks().remove(newblock);
             return false;
         }
     }
@@ -161,14 +161,35 @@ public class Node {
     }
 
     public void decreaseTokensToVoteWith(float v) {
-        TokensToVoteWith -= v;
+        if (TokensToVoteWith <= v) {
+            TokensToVoteWith = 0;
+        }
+        else {
+            TokensToVoteWith -= v;
+        }
+    }
+
+    public List<Float> getTrust() {
+        return trust;
     }
 
     public void increaseTrust(int index,float v) {
-        trust.set(index, trust.get(index) + v);
+        for(int j = 0; j < NodeNum; j++){
+            if (j == index){
+                trust.set(j, trust.get(j) + v);
+            }
+            else{
+                trust.set(j, trust.get(j) - (v / (NodeNum-1)));
+            }
+        }
     }
 
     public void decreaseTrust(int index,float v) {
-        trust.set(index, trust.get(index) + v);
+        if(trust.get(index) <= v){
+            trust.set(index, 0.0F);
+        }
+        else{
+            trust.set(index, trust.get(index) - v);
+        }
     }
 }

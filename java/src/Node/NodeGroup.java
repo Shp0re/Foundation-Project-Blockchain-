@@ -28,6 +28,14 @@ public class NodeGroup {
         }
     }
 
+    public Blockchain getBlockchain() {
+        return blockchain;
+    }
+
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
     public void addNode(Node node, int index){
         node.setindex(index);
         node.setLocalBlockchain(blockchain);
@@ -36,6 +44,10 @@ public class NodeGroup {
         for(Node n : nodes){
             n.setNodeNum(NodeNum);
         }
+    }
+
+    public List<Node> getWitnesses() {
+        return witnesses;
     }
 
     public boolean ValidateBlockchain(){
@@ -54,6 +66,7 @@ public class NodeGroup {
                 return false;
             }
         }
+        setBlockchain(witnesses.getFirst().getLocalBlockchain());
         rewardWitnesses();
         rewardVoters();
         return true;
@@ -68,7 +81,7 @@ public class NodeGroup {
     private void rewardVoters(){
         for (Node node : nodes) {
             for(Node witness : witnesses) {
-                if (node.getTopvotes() == witness.getindex()){
+                if (node.getTopvotes() == witness.getindex() && node.getindex() != witness.getindex()) {
                     node.increaseTokensToVoteWith((float) 0.25);
                     node.increaseTrust(witness.getindex(), (float) 0.5);
                 }
@@ -80,10 +93,21 @@ public class NodeGroup {
         for (Node node : nodes) {
             for(long validatedSignature : node.getNodesValidated()) {
                 if (validatedSignature == digitalSignature) {
-                    node.decreaseTokensToVoteWith((float) 0.5);
+                    node.decreaseTokensToVoteWith((float) 1.0);
                     for (Node otherNodes : nodes) {
-                        otherNodes.decreaseTrust(node.getindex(), (float) 0.5);
+                        otherNodes.decreaseTrust(node.getindex(), (float) 1.0);
                     }
+                }
+            }
+        }
+    }
+
+    public void punishVoters(){
+        for (Node node : nodes) {
+            for(Node witness : witnesses) {
+                if (node.getTopvotes() == witness.getindex()){
+                    node.decreaseTokensToVoteWith((float) 0.5);
+                    node.decreaseTrust(witness.getindex(), (float) 1.0);
                 }
             }
         }
@@ -93,12 +117,17 @@ public class NodeGroup {
         for (Node node : nodes) {
             node.vote(nodes);
         }
+        witnesses = new ArrayList<Node>(nodes);
         Sortnodes();
-        witnesses = nodes.subList(0, 1);
+        witnesses = witnesses.subList(0, NodeNum/2 - 1);
     }
 
     private void Sortnodes() {
-        Collections.sort(nodes, new NumOfVotesComparator());
+        Collections.sort(witnesses, new NumOfVotesComparator());
+    }
+
+    public int getNodeNum() {
+        return NodeNum;
     }
 
 }

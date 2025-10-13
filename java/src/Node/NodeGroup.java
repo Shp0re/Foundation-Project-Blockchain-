@@ -18,7 +18,7 @@ public class NodeGroup {
     public NodeGroup() {
         nodes = new ArrayList<Node>();
         blockchain = new BlockchainImpl(this);
-        NodeNum = nodes.size();
+        NodeNum = 0;
     }
 
     public void setBlockchain(Blockchain blockchain) {
@@ -70,6 +70,20 @@ public class NodeGroup {
             for(Node witness : witnesses) {
                 if (node.getTopvotes() == witness.getindex()){
                     node.increaseTokensToVoteWith((float) 0.25);
+                    node.increaseTrust(witness.getindex(), (float) 0.5);
+                }
+            }
+        }
+    }
+
+    public void punishWitnesses(long digitalSignature) {
+        for (Node node : nodes) {
+            for(long validatedSignature : node.getNodesValidated()) {
+                if (validatedSignature == digitalSignature) {
+                    node.decreaseTokensToVoteWith((float) 0.5);
+                    for (Node otherNodes : nodes) {
+                        otherNodes.decreaseTrust(node.getindex(), (float) 0.5);
+                    }
                 }
             }
         }

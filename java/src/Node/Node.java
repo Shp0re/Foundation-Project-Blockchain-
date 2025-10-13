@@ -15,6 +15,7 @@ public class Node {
     private float TokensToVoteWith;
     private float NumVotesFor;
     private List<Float> trust;
+    private List<Long> NodesValidated;
 
     public Node() {
         localBlockchain = new BlockchainImpl(new NodeGroup());
@@ -22,6 +23,7 @@ public class Node {
         trust = RandomTrust();
         TokensToVoteWith = 1;
         NumVotesFor = 0;
+        NodesValidated = new ArrayList<Long>();
     }
 
     public void setTokensToVoteWith(float tokensToVoteWith) {
@@ -34,6 +36,10 @@ public class Node {
 
     public void setLocalBlockchain(Blockchain localBlockchain) {
         this.localBlockchain = localBlockchain;
+    }
+
+    public List<Long> getNodesValidated() {
+        return NodesValidated;
     }
 
     public void setNodeNum(int nodeNum) {
@@ -134,6 +140,7 @@ public class Node {
         }
         tempChain.getBlocks().add(newblock);
         if (isChainValid(tempChain)) {
+            NodesValidated.add(newblock.getDigitalSignature());
             return true;
         }
         else {
@@ -151,5 +158,17 @@ public class Node {
 
     public void increaseTokensToVoteWith(float v) {
         TokensToVoteWith += v;
+    }
+
+    public void decreaseTokensToVoteWith(float v) {
+        TokensToVoteWith -= v;
+    }
+
+    public void increaseTrust(int index,float v) {
+        trust.set(index, trust.get(index) + v);
+    }
+
+    public void decreaseTrust(int index,float v) {
+        trust.set(index, trust.get(index) + v);
     }
 }

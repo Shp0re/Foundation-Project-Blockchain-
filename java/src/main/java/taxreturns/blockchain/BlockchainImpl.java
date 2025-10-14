@@ -1,13 +1,17 @@
 package main.java.taxreturns.blockchain;
 
+import Node.NodeGroup;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlockchainImpl implements Blockchain {
 
+    NodeGroup nodeGroup;
     List<Block> blockchain;
-    public BlockchainImpl() {
+    public BlockchainImpl(NodeGroup nodeGroup) {
         this.blockchain = new ArrayList<Block>();
+        this.nodeGroup = nodeGroup;
     }
 
     @Override
@@ -56,26 +60,22 @@ public class BlockchainImpl implements Blockchain {
     }
 
     @Override
-    public void addBlock(Block newBlock) {
-        newBlock.setBlockIndex(this.blockchain.size()+1);
-        if (!(this.getLatestBlock() == null)) {
-            newBlock.setPreviousHash(this.getLatestBlock().getHash());
-        }
-        this.blockchain.add(newBlock);
+    public int size() {
+        return blockchain.size();
     }
 
     @Override
-    public boolean isChainValid() {
-        for (int i = 1; i < blockchain.size(); i++) {
-            Block block = blockchain.get(i);
-            Block previousBlock = blockchain.get(i - 1);
-            if (!block.getPreviousHash().equals(previousBlock.getHash())) {
-                System.out.println("Block " + (i) + " is not referenced");
-                return false;
-            }
-        }
-        return true;
+    public Block getBlockIndex(int i) {
+        return blockchain.get(i);
     }
+
+    @Override
+    public void addBlock(Block newBlock) {
+        if (nodeGroup.checkNewBlock(newBlock)) {
+            this.blockchain = nodeGroup.getBlockchain().getBlocks();
+        }
+    }
+
 
     @Override
     public Block getLatestBlock() {

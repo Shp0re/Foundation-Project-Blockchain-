@@ -45,21 +45,21 @@ class BlockchainImplTest {
     @Test
     void whenBlockAdded_ThenItMaintainsBlockchainIntegrity() {
 
-        blockchain.addBlock(testBlock);
+        blockchain.addBlock(testBlock,0);
 
-        assertTrue(testNodeGroup.ValidateBlockchain());
+        assertTrue(testNodeGroup.ValidateBlockchain(0));
     }
 
     @Test
     void whenBlockAdded_ThenItHasAUniqueID() {
-        blockchain.addBlock(testBlock);
-        blockchain.addBlock(testBlock2);
+        blockchain.addBlock(testBlock,0);
+        blockchain.addBlock(testBlock2,0);
         assertNotEquals(testBlock.getHash(), testBlock2.getHash());
     }
 
     @Test
     void whenBlockEdited_ThenItsHashChanges() {
-        blockchain.addBlock(testBlock);
+        blockchain.addBlock(testBlock,0);
         String initialBlockHash = testBlock.getHash();
 
         blockchain.editBlock(initialBlockHash,testData2);

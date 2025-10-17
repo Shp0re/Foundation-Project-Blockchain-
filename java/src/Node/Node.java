@@ -5,11 +5,11 @@ import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class Node {
-    private Blockchain localBlockchain;
+    private List<Blockchain> localBlockchains;
     private int index;
     private int NodeNum;
     private float TokensToVoteWith;
@@ -18,7 +18,7 @@ public class Node {
     private List<Long> NodesValidated;
 
     public Node() {
-        localBlockchain = new BlockchainImpl(new NodeGroup());
+        localBlockchains = Collections.singletonList(new BlockchainImpl(new NodeGroup()));
         this.NodeNum = 0;
         trust = RandomTrust();
         TokensToVoteWith = 1;
@@ -30,12 +30,16 @@ public class Node {
         TokensToVoteWith = tokensToVoteWith;
     }
 
-    public Blockchain getLocalBlockchain() {
-        return localBlockchain;
+    public Blockchain getLocalBlockchain(int index) {
+        return localBlockchains.get(index);
     }
 
-    public void setLocalBlockchain(Blockchain localBlockchain) {
-        this.localBlockchain = localBlockchain;
+    public void setLocalBlockchains(List<Blockchain> localBlockchains) {
+        this.localBlockchains = localBlockchains;
+    }
+
+    public void setLocalBlockchain(Blockchain localBlockchain, int index) {
+        localBlockchains.set(index, localBlockchain);
     }
 
     public List<Long> getNodesValidated() {
@@ -132,18 +136,18 @@ public class Node {
         return true;
     }
 
-    public boolean isNewBlockValid(Block newblock) {
-        newblock.setBlockIndex(localBlockchain.size());
-        if (!(localBlockchain.getLatestBlock() == null)) {
-            newblock.setPreviousHash(localBlockchain.getLatestBlock().getHash());
+    public boolean isNewBlockValid(Block newblock, int blockchainIndex) {
+        newblock.setBlockIndex(localBlockchains.size());
+        if (!(localBlockchains.get(blockchainIndex).getLatestBlock() == null)) {
+            newblock.setPreviousHash(localBlockchains.get(blockchainIndex).getLatestBlock().getHash());
         }
-        localBlockchain.getBlocks().add(newblock);
-        if (isChainValid(localBlockchain)) {
+        localBlockchains.get(blockchainIndex).getBlocks().add(newblock);
+        if (isChainValid(localBlockchains.get(blockchainIndex))) {
             NodesValidated.add(newblock.getDigitalSignature());
             return true;
         }
         else {
-            localBlockchain.getBlocks().remove(newblock);
+            localBlockchains.get(blockchainIndex).getBlocks().remove(newblock);
             return false;
         }
     }
@@ -191,5 +195,13 @@ public class Node {
         else{
             trust.set(index, trust.get(index) - v);
         }
+    }
+
+    public void addBlockchain(Blockchain blockchains) {
+        localBlockchains.add(blockchains);
+    }
+
+    public List<Blockchain> getLocalBlockchains() {
+        return localBlockchains;
     }
 }

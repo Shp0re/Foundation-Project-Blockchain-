@@ -45,14 +45,14 @@ public class TaxReturnApplication {
 
         System.out.println("Second block to be added: " + block1.output() + "\n");
 
-        blockchain.addBlock(block);
-        blockchain.addBlock(block1);
+        blockchain.addBlock(block,0);
+        blockchain.addBlock(block1,0);
 
         System.out.println("Blocks has been successfully added\n");
 
         System.out.println(blockchain.output());
 
-        System.out.println("Is chain valid? " + nodeGroup.ValidateBlockchain() + "\n");
+        System.out.println("Is chain valid? " + nodeGroup.ValidateBlockchain(0) + "\n");
 
         System.out.println("Editing a block to have new test data");
 
@@ -107,7 +107,7 @@ public class TaxReturnApplication {
 
         Contract contract = new Contract(29328102,testData,smartFunctions,null);
 
-        blockchain.addBlock(contract);
+        blockchain.addBlock(contract,0);
 
         System.out.println("Run contract\n");
 

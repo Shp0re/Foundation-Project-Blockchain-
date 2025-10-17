@@ -6,30 +6,36 @@ import main.java.taxreturns.blockchain.BlockchainImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class NodeGroup {
     private List<Node> nodes;
     private List<Node> witnesses;
-    private Blockchain blockchain;
+    private List<Blockchain> blockchains;
     private int NodeNum;
 
     public NodeGroup() {
         nodes = new ArrayList<Node>();
-        blockchain = new BlockchainImpl(this);
+        blockchains = new ArrayList<Blockchain>();
         NodeNum = 0;
     }
 
-    public void setBlockchain(Blockchain blockchain) {
-        this.blockchain = blockchain;
+    public void setBlockchain(Blockchain blockchains, int index) {
+        this.blockchains.set(index,blockchains);
         for (Node node : nodes) {
-            node.setLocalBlockchain(blockchain);
+            node.setLocalBlockchain(blockchains,index);
         }
     }
 
-    public Blockchain getBlockchain() {
-        return blockchain;
+    public void addBlockchain(Blockchain blockchain) {
+        this.blockchains.add(blockchain);
+        for (Node node : nodes) {
+            node.addBlockchain(blockchain);
+        }
+    }
+
+    public List<Blockchain> getBlockchains() {
+        return blockchains;
     }
 
     public List<Node> getNodes() {
@@ -38,10 +44,11 @@ public class NodeGroup {
 
     public void addNode(Node node, int index){
         node.setindex(index);
-        node.setLocalBlockchain(blockchain);
+        node.setLocalBlockchains(blockchains);
         nodes.add(node);
         NodeNum++;
         for(Node n : nodes){
+            n.setLocalBlockchains(blockchains);
             n.setNodeNum(NodeNum);
         }
     }
@@ -50,23 +57,23 @@ public class NodeGroup {
         return witnesses;
     }
 
-    public boolean ValidateBlockchain(){
+    public boolean ValidateBlockchain(int index){
         for (Node witness : witnesses){
-            if (!witness.isChainValid(witness.getLocalBlockchain())){
+            if (!witness.isChainValid(witness.getLocalBlockchain(index))){
                 return false;
             }
         }
         return true;
     }
 
-    public boolean checkNewBlock(Block newBlock) {
+    public boolean checkNewBlock(Block newBlock, int index) {
         setWitnesses();
         for (Node witness : witnesses){
-            if (!witness.isNewBlockValid(newBlock)){
+            if (!witness.isNewBlockValid(newBlock,index)){
                 return false;
             }
         }
-        setBlockchain(witnesses.getFirst().getLocalBlockchain());
+        setBlockchain(witnesses.getFirst().getLocalBlockchain(index),index);
         rewardWitnesses();
         rewardVoters();
         return true;
@@ -130,4 +137,7 @@ public class NodeGroup {
         return NodeNum;
     }
 
+    public Blockchain getBlockchain(int blockchainIndex) {
+        return blockchains.get(blockchainIndex);
+    }
 }

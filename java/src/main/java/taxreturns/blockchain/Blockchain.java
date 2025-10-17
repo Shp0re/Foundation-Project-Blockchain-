@@ -6,7 +6,7 @@ public interface Blockchain {
 
     List<Block> getBlocks();
 
-    void addBlock(Block newBlock);
+    void addBlock(Block newBlock, int blockchainIndex);
 
     Block getLatestBlock();
 

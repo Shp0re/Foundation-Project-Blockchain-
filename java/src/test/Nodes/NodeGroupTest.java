@@ -21,8 +21,11 @@ class NodeGroupTest {
 
     NodeGroup nodeGroup;
     Blockchain blockchain;
+    Blockchain blockchain2;
     Block  block;
     Block block1;
+    Block block2;
+    Block block3;
 
     @BeforeEach
     void init() {
@@ -33,11 +36,14 @@ class NodeGroupTest {
         nodeGroup.addNode(new Node(),3);
 
          blockchain = new BlockchainImpl(nodeGroup);
+         blockchain2 = new BlockchainImpl(nodeGroup);
 
         List<String> testData = List.of("ImportantInformation", "SensitiveData", "ClassifiedDocuments");
 
         block = new Block(29328102, testData);
         block1 = new Block(121838213, testData);
+        block2 = new Block(467377732, testData);
+        block3 = new Block(627367382, testData);
     }
 
     @Test
@@ -49,29 +55,29 @@ class NodeGroupTest {
     @Test
     public void TestNewNodeValidationTrue() {
 
-        blockchain.addBlock(block);
-        blockchain.addBlock(block1);
+        blockchain.addBlock(block,0);
+        blockchain.addBlock(block1,0);
 
-        assertTrue(nodeGroup.ValidateBlockchain());
+        assertTrue(nodeGroup.ValidateBlockchain(0));
     }
 
     @Test
     public void TestNewNodeValidationFalse() {
 
-        blockchain.addBlock(block);
-        blockchain.addBlock(block1);
+        blockchain.addBlock(block,1);
+        blockchain.addBlock(block1,1);
 
         List<String> newTestData = List.of("RestrictedDetails", "ExclusivePlans", "PersonalTransaction");
         String testHash = block.getHash();
         blockchain.editBlock(testHash, newTestData);
 
-        assertFalse(nodeGroup.ValidateBlockchain());
+        assertFalse(nodeGroup.ValidateBlockchain(1));
     }
 
     @Test
     public void TestWitnessRewardTokens() {
 
-        blockchain.addBlock(block);
+        blockchain.addBlock(block,0);
 
         int firstWitnessIndex = nodeGroup.getWitnesses().get(0).getindex();
 
@@ -85,7 +91,7 @@ class NodeGroupTest {
     @Test
     public void TestWitnessRewardTrust() {
 
-        blockchain.addBlock(block);
+        blockchain.addBlock(block,0);
 
         int firstWitnessIndex = nodeGroup.getWitnesses().get(0).getindex();
         for(Node node : nodeGroup.getNodes()) {
@@ -99,7 +105,7 @@ class NodeGroupTest {
     @Test
     public void TestVoterRewardTokens() {
 
-        blockchain.addBlock(block);
+        blockchain.addBlock(block,0);
 
         int firstWitnessIndex = nodeGroup.getWitnesses().get(0).getindex();
         for(Node node : nodeGroup.getNodes()) {
@@ -112,7 +118,7 @@ class NodeGroupTest {
     @Test
     public void TestWitnessPunishTokens() {
 
-        blockchain.addBlock(block);
+        blockchain.addBlock(block,0);
         nodeGroup.punishWitnesses(block.getDigitalSignature());
 
         for (Node node : nodeGroup.getNodes()) {
@@ -128,7 +134,7 @@ class NodeGroupTest {
     @Test
     public void TestWitnessPunishTrust() {
 
-        blockchain.addBlock(block);
+        blockchain.addBlock(block,0);
         nodeGroup.punishWitnesses(block.getDigitalSignature());
 
         int firstWitnessIndex = nodeGroup.getWitnesses().get(0).getindex();
@@ -142,7 +148,7 @@ class NodeGroupTest {
 
     @Test
     public void TestVoterPunishTokens() {
-        blockchain.addBlock(block);
+        blockchain.addBlock(block,0);
         nodeGroup.punishVoters();
 
         int firstWitnessIndex = nodeGroup.getWitnesses().get(0).getindex();
@@ -151,5 +157,21 @@ class NodeGroupTest {
                 assertEquals(0.25, node.getTokensToVoteWith());
             }
         }
+    }
+
+    @Test
+    public void TestTwoBlockchains(){
+
+        blockchain.addBlock(block,0);
+        blockchain.addBlock(block1,0);
+        blockchain.addBlock(block2,1);
+        blockchain.addBlock(block3,1);
+
+        List<String> newTestData = List.of("RestrictedDetails", "ExclusivePlans", "PersonalTransaction");
+        String testHash = block3.getHash();
+        blockchain.editBlock(testHash, newTestData);
+
+        assertTrue(nodeGroup.ValidateBlockchain(0));
+
     }
 }

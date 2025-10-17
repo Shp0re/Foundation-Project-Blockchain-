@@ -1,5 +1,6 @@
 package main.java.taxreturns.frontEnd;
 
+import Node.*;
 import main.java.taxreturns.blockControler.Controller;
 import main.java.taxreturns.blockchain.Block;
 
@@ -19,9 +20,12 @@ public class UIController extends JFrame {
     private JPanel cardPanel;
     private LoginPage loginPage;
     private ShowTransactionsPage showTransactionsPage;
-    public Controller manager = new Controller(); // its public bc I cant be bothered to add getters and setters
+    private NodeGroup nodeGroup;
+    public Controller manager; // its public bc I cant be bothered to add getters and setters
 
-    public UIController(){
+    public UIController(NodeGroup nodeGroup){
+        this.nodeGroup = nodeGroup;
+        this.manager = new Controller(nodeGroup);
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         loginPage = new LoginPage();

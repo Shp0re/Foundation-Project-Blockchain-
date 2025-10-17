@@ -5,7 +5,6 @@ import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Node Group Test")
 class NodeGroupTest {

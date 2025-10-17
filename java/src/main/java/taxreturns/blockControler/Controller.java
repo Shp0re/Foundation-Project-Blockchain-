@@ -1,4 +1,5 @@
 package main.java.taxreturns.blockControler;
+import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.BlockchainImpl;
 import java.security.InvalidParameterException;
@@ -8,8 +9,10 @@ public class Controller{
     // Account Identifier Map (AIM)
     private final MultiValueHashMap<String, String> AIM = new MultiValueHashMap<>();
     private final HashMap<String, MultiChannel> orgMap = new HashMap<String, MultiChannel>();
+    private NodeGroup nodeGroup = new NodeGroup();
 
-    public Controller(){
+    public Controller(NodeGroup nodeGroup){
+        this.nodeGroup = nodeGroup;
     }
 
     private MultiChannel getSpecificItem(String identifier){
@@ -22,7 +25,7 @@ public class Controller{
     }
 
     public void addAccount(String[] newAccountData){
-        BlockchainImpl ledger = new BlockchainImpl();
+        BlockchainImpl ledger = new BlockchainImpl(nodeGroup);
         SingleChannel newAccount = new SingleChannel(newAccountData[0], ledger);
         try{
             MultiChannel accountOrganisation = this.getSpecificItem(newAccountData[1]);

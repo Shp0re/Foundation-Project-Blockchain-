@@ -121,7 +121,7 @@ public class TaxReturnApplication {
         String[][] accountData = {{"10045555", "010203"}, {"10071456","010203"}, {"12242256", "010203"}, {"11111111", "040507"}, {"12233221", "040507"}};
 
         // creating controler
-        UIController controller = new UIController();
+        UIController controller = new UIController(nodeGroup);
 
         //populating controller with data
 

@@ -1,5 +1,7 @@
 package test.smartContracts;
 
+import Node.Node;
+import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
@@ -22,8 +24,14 @@ class SmartFunctionsTest {
     @Test
     void whenConditionsAreMet_ThenReturnsTrue() {
 
+        NodeGroup testNodeGroup = new NodeGroup();
+        testNodeGroup.addNode(new Node(),0);
+        testNodeGroup.addNode(new Node(),1);
+        testNodeGroup.addNode(new Node(),2);
+        testNodeGroup.addNode(new Node(),3);
+
         // Create Blockchain
-        Blockchain blockchain = new BlockchainImpl();
+        Blockchain blockchain = new BlockchainImpl(testNodeGroup);
         List<String> testData = List.of("ImportantInformation", "SensitiveData", "ClassifiedDocuments");
         Block block = new Block(29328102, testData);
         Block block1 = new Block(121838213, testData);

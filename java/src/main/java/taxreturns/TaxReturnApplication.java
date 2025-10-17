@@ -1,5 +1,7 @@
 package main.java.taxreturns;
 
+import Node.Node;
+import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
@@ -13,14 +15,21 @@ import main.java.taxreturns.smartContract.smartScripts.SmartScripts;
 
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaxReturnApplication {
 
     public static void main(String[] args) {
 
-        // BlOCKCHAIN VISUALISATION
-        Blockchain blockchain = new BlockchainImpl();
+        NodeGroup nodeGroup = new NodeGroup();
+        nodeGroup.addNode(new Node(),0);
+        nodeGroup.addNode(new Node(),1);
+        nodeGroup.addNode(new Node(),2);
+        nodeGroup.addNode(new Node(),3);
+
+        Blockchain blockchain = new BlockchainImpl(nodeGroup);
 
         System.out.println("Empty Blockchain Created \n");
 
@@ -43,7 +52,7 @@ public class TaxReturnApplication {
 
         System.out.println(blockchain.output());
 
-        System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
+        System.out.println("Is chain valid? " + nodeGroup.ValidateBlockchain() + "\n");
 
         System.out.println("Editing a block to have new test data");
 
@@ -60,20 +69,20 @@ public class TaxReturnApplication {
         System.out.println("Block has been successfully edited\n");
         System.out.println(blockchain.output());
 
-        System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
+        //System.out.println("Is chain valid? " + blockchain.isChainValid() + "\n");
 
-         //SMART CONTRACT VISUALISATION
+         //SMART CONTRACT IMPLEMENTATION
 
         System.out.println("Smart contract creation steps\n");
 
-        TimeCondition AfterJan1st99;
+        TimeCondition AfterJan1st99 = null;
 
         System.out.println("Create conditions\n");
 
         try {
             AfterJan1st99 = new TimeCondition("01-01-1999 00:00:00");
         } catch (Exception e) {
-            throw new RuntimeException("Invalid date format");
+            throw new RuntimeException(e);
         }
 
         System.out.println("This condition: " + AfterJan1st99.output());

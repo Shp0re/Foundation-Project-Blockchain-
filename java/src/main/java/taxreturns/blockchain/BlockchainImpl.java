@@ -9,10 +9,10 @@ public class BlockchainImpl implements Blockchain {
 
     NodeGroup nodeGroup;
     List<Block> blockchain;
-    public BlockchainImpl(NodeGroup nodeGroup) {
+    public BlockchainImpl(NodeGroup nodeGroup,String accID) {
         this.blockchain = new ArrayList<Block>();
         this.nodeGroup = nodeGroup;
-        nodeGroup.addBlockchain(this);
+        nodeGroup.setBlockchain(this, accID);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class BlockchainImpl implements Blockchain {
     }
 
     @Override
-    public void addBlock(Block newBlock, int blockchainIndex) {
+    public void addBlock(Block newBlock, String blockchainIndex) {
         if (nodeGroup.checkNewBlock(newBlock,blockchainIndex)) {
             this.blockchain = nodeGroup.getBlockchain(blockchainIndex).getBlocks();
         }

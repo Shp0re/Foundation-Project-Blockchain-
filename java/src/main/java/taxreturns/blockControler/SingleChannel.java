@@ -1,5 +1,6 @@
 package main.java.taxreturns.blockControler;
 
+import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 
@@ -41,8 +42,8 @@ public class SingleChannel implements Channel {
         this.name = name;
     }
 
-    public void addBlock(Block blockToAdd){
-        this.ledger.addBlock(blockToAdd);
+    public void addBlock(Block blockToAdd,String fullID){
+        this.ledger.addBlock(blockToAdd, fullID);
         System.out.println("LOG: Transaction:"+ blockToAdd.getDigitalSignature()+ " Added to Account:"+this.getID());
     }
 }

@@ -31,12 +31,12 @@ class SmartFunctionsTest {
         testNodeGroup.addNode(new Node(),3);
 
         // Create Blockchain
-        Blockchain blockchain = new BlockchainImpl(testNodeGroup);
+        Blockchain blockchain = new BlockchainImpl(testNodeGroup, "4");
         List<String> testData = List.of("ImportantInformation", "SensitiveData", "ClassifiedDocuments");
         Block block = new Block(29328102, testData);
         Block block1 = new Block(121838213, testData);
-        blockchain.addBlock(block,0);
-        blockchain.addBlock(block1,0);
+        blockchain.addBlock(block,"0");
+        blockchain.addBlock(block1,"0");
 
         Boolean exceptionthrown = false;
         // Create Smart Function;

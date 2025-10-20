@@ -25,7 +25,7 @@ public class Controller{
     }
 
     public void addAccount(String[] newAccountData){
-        BlockchainImpl ledger = new BlockchainImpl(nodeGroup);
+        BlockchainImpl ledger = new BlockchainImpl(nodeGroup, (newAccountData[1] + newAccountData[0]));
         SingleChannel newAccount = new SingleChannel(newAccountData[0], ledger);
         try{
             MultiChannel accountOrganisation = this.getSpecificItem(newAccountData[1]);
@@ -103,7 +103,7 @@ public class Controller{
             account = getAccount(transactionData[0]);
             ArrayList<String> transactionInfo = new ArrayList<>(Arrays.asList(transactionData).subList(2, transactionData.length));
             transactionInfo.addFirst(transactionData[0].substring(6));
-            account.addBlock(new Block(Long.parseLong(transactionData[1]), transactionInfo));
+            account.addBlock(new Block(Long.parseLong(transactionData[1]), transactionInfo), transactionData[0]);
         }
     }
 

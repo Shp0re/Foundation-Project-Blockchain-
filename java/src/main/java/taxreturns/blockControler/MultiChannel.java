@@ -1,5 +1,7 @@
 package main.java.taxreturns.blockControler;
 
+import Node.NodeGroup;
+
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Objects;

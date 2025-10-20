@@ -4,39 +4,37 @@ import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.Blockchain;
 import main.java.taxreturns.blockchain.BlockchainImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class NodeGroup {
     private List<Node> nodes;
     private List<Node> witnesses;
-    private List<Blockchain> blockchains;
+    private HashMap<String, Blockchain> blockchains;
     private int NodeNum;
 
     public NodeGroup() {
         nodes = new ArrayList<Node>();
-        blockchains = new ArrayList<Blockchain>();
+        blockchains = new HashMap<>();
         NodeNum = 0;
     }
 
-    public void setBlockchain(Blockchain blockchains, int index) {
-        this.blockchains.set(index,blockchains);
+    public void setBlockchain(Blockchain blockchains, String index) {
+        this.blockchains.put(index, blockchains);
         for (Node node : nodes) {
-            node.setLocalBlockchain(blockchains,index);
+            node.setLocalBlockchain(blockchains, index);
         }
     }
 
-    public void addBlockchain(Blockchain blockchain) {
-        this.blockchains.add(blockchain);
-        for (Node node : nodes) {
-            node.addBlockchain(blockchain);
-        }
-    }
+//    public void addBlockchain(Blockchain blockchain, String chainID) {
+//        this.blockchains.add(blockchain);
+//        for (Node node : nodes) {
+//            node.addBlockchain(blockchain);
+//        }
+//    }
 
-    public List<Blockchain> getBlockchains() {
-        return blockchains;
-    }
+//    public List<Blockchain> getBlockchains() {
+//        return blockchains.;
+//    }
 
     public List<Node> getNodes() {
         return nodes;
@@ -57,16 +55,19 @@ public class NodeGroup {
         return witnesses;
     }
 
-    public boolean ValidateBlockchain(int index){
+    public boolean ValidateBlockchain(String index){
         for (Node witness : witnesses){
             if (!witness.isChainValid(witness.getLocalBlockchain(index))){
+                if(witness.getLocalBlockchain(index) == null){
+                    throw new NoSuchElementException("ERROR: No Such Blockchain with index: "+index);
+                }
                 return false;
             }
         }
         return true;
     }
 
-    public boolean checkNewBlock(Block newBlock, int index) {
+    public boolean checkNewBlock(Block newBlock, String index) {
         setWitnesses();
         for (Node witness : witnesses){
             if (!witness.isNewBlockValid(newBlock,index)){
@@ -137,7 +138,7 @@ public class NodeGroup {
         return NodeNum;
     }
 
-    public Blockchain getBlockchain(int blockchainIndex) {
+    public Blockchain getBlockchain(String blockchainIndex) {
         return blockchains.get(blockchainIndex);
     }
 }

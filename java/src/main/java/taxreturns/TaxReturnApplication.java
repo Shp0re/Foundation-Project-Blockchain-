@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class TaxReturnApplication {
 
@@ -29,7 +30,7 @@ public class TaxReturnApplication {
         nodeGroup.addNode(new Node(),2);
         nodeGroup.addNode(new Node(),3);
 
-        Blockchain blockchain = new BlockchainImpl(nodeGroup);
+        Blockchain blockchain = new BlockchainImpl(nodeGroup, "0");
 
         System.out.println("Empty Blockchain Created \n");
 
@@ -45,14 +46,18 @@ public class TaxReturnApplication {
 
         System.out.println("Second block to be added: " + block1.output() + "\n");
 
-        blockchain.addBlock(block,0);
-        blockchain.addBlock(block1,0);
+        try {
+            blockchain.addBlock(block, "0");
+            blockchain.addBlock(block1, "0");
+        }catch (NoSuchElementException e){
+            System.out.println("WARNING: Unable to add Blocks to chain threw ERROR:"+e);
+        }
 
         System.out.println("Blocks has been successfully added\n");
 
         System.out.println(blockchain.output());
 
-        System.out.println("Is chain valid? " + nodeGroup.ValidateBlockchain(0) + "\n");
+        System.out.println("Is chain valid? " + nodeGroup.ValidateBlockchain("0") + "\n");
 
         System.out.println("Editing a block to have new test data");
 
@@ -107,7 +112,7 @@ public class TaxReturnApplication {
 
         Contract contract = new Contract(29328102,testData,smartFunctions,null);
 
-        blockchain.addBlock(contract,0);
+        blockchain.addBlock(contract,"0");
 
         System.out.println("Run contract\n");
 
@@ -138,7 +143,7 @@ public class TaxReturnApplication {
             try{
                 controller.manager.addAccount(accountData[i]);
             } catch (Exception e) {
-                System.out.println("WARNING: Account "+ accountData[i][0]+ ". Could not be added");
+                System.out.println("WARNING: Account "+ accountData[i][0]+ ". Could not be added ERRROR Cause: "+e);
             }
         }
         //then transactions

@@ -130,12 +130,12 @@ public class TaxReturnApplication {
 
         //populating controller with data
 
-        //first organisations
+        //first add organisations
         for (int i = 0; i < 2; i++) {
             try{
                 controller.manager.addOrganisation(orgData[i]);
             } catch (Exception e) {
-                System.out.println("WARNING: Org "+ orgData[i][0]+ ". Could not be added");
+                System.out.println("WARNING: Org "+ orgData[i][0]+ ". Could not be added due to ERROR:"+e);
             }
         }
         //then accounts
@@ -157,8 +157,10 @@ public class TaxReturnApplication {
         //finally link accounts to taxIDs
         try{
             controller.manager.LinkIDtoAcc("TAX001","10045555", "010203");
+            controller.manager.LinkIDtoAcc("TAX002","10071456","010203");
+            controller.manager.LinkIDtoAcc("TAX002","12233221", "040507");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("WARNING: Issue in linking accounts to tax number. Case:"+e);
         }
 
 

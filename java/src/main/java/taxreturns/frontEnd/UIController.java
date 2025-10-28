@@ -21,6 +21,7 @@ public class UIController extends JFrame {
     private LoginPage loginPage;
     private ShowTransactionsPage showTransactionsPage;
     private NodeGroup nodeGroup;
+    private DisplayTaxBill billPage;
     public Controller manager; // its public bc I cant be bothered to add getters and setters
 
     public UIController(NodeGroup nodeGroup){
@@ -46,6 +47,24 @@ public class UIController extends JFrame {
                     }
                 }
                 this.showTransactionsPage = new ShowTransactionsPage(tableData);
+                showTransactionsPage.setTransactionAcceptanceListener(transactionData -> {
+                    Float totalIncome = calculateTaxBill(transactionData);
+                    System.out.println("LOG: Income calculated to be £"+totalIncome);
+                    Float taxBill;
+                    if (totalIncome > 125140){
+                        taxBill = (totalIncome / 100) * 45;
+                    }else if(totalIncome > 50270) {
+                        taxBill = (totalIncome / 100) * 40;
+                    }else if(totalIncome > 12570){
+                        taxBill = (totalIncome / 100) * 20;
+                    }else{
+                        taxBill = 0.0F;
+                    }
+                    this.billPage = new DisplayTaxBill(taxBill);
+                    cardPanel.add(billPage.getMainPage(), "bill");
+                    cardLayout.show(cardPanel, "bill");
+
+                });
                 cardPanel.add(showTransactionsPage.getMainPage(), "transactions");
                 cardLayout.show(cardPanel, "transactions");
             } catch (RuntimeException e) {
@@ -53,6 +72,8 @@ public class UIController extends JFrame {
                 JOptionPane.showMessageDialog(this, "Invalid login", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+
 
         cardPanel.add(loginPage.getMainPanel(), "login");
         add(cardPanel);
@@ -83,5 +104,16 @@ public class UIController extends JFrame {
                     System.out.println("WARNING: Exception when reading in data: "+e);
                 }
             }
+    }
+
+    private float calculateTaxBill(Object[][] data){
+        float total = 0;
+        for (int i = 0; i < data.length; i++) {
+            if(data[i][4].equals("Income")){
+                String transactionAmount = data[i][3].toString();
+                total = total + Float.parseFloat( (transactionAmount.replace('£', ' ')));
+            }
+        }
+        return total;
     }
 }

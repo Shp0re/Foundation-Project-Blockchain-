@@ -104,9 +104,17 @@ public class Node {
     public List<Node>  vote(List<Node> nodes) {
         int postion = 0;
         for(Node node : nodes){
-            float NodeTrust = TokensToVoteWith * trust.get(postion);
-            node.setNumVotesFor(node.getNumVotesFor() + NodeTrust);
-            postion++;
+            try {
+                if (trust == null){
+                    System.out.println("WARNING: trust values null setting them to random values");
+                    trust = RandomTrust();
+                }
+                float NodeTrust = TokensToVoteWith * trust.get(postion);
+                node.setNumVotesFor(node.getNumVotesFor() + NodeTrust);
+                postion++;
+            }catch (Exception e){
+                System.out.println("ERROR: "+e);
+            }
         }
         return nodes;
     }
@@ -126,8 +134,11 @@ public class Node {
         for (int i = 1; i < blockchain.size(); i++) {
             Block block = blockchain.getBlockIndex(i);
             Block previousBlock = blockchain.getBlockIndex(i - 1);
+            if (block.getPreviousHash().isEmpty() && previousBlock == null){
+                System.out.println("WARNING: first block detected in a non first block space");
+            }
             if (!block.getPreviousHash().equals(previousBlock.getHash())) {
-                System.out.println("Block " + (i) + " is not referenced");
+                System.out.println(STR."WARNING: Block \{block.getDigitalSignature()} dose not referance block \{previousBlock.getDigitalSignature()}");
                 return false;
             }
         }
@@ -136,16 +147,20 @@ public class Node {
 
     public boolean isNewBlockValid(Block newblock, String blockchainIndex) {
         try {
-            newblock.setBlockIndex(localBlockchains.size());
+            newblock.setBlockIndex(localBlockchains.get(blockchainIndex).size());
             if (!(localBlockchains.get(blockchainIndex).getLatestBlock() == null)) {
                 newblock.setPreviousHash(localBlockchains.get(blockchainIndex).getLatestBlock().getHash());
+            }else{
+                System.out.println("LOG: no previous block detected");
             }
-            localBlockchains.get(blockchainIndex).getBlocks().add(newblock);
+
             if (isChainValid(localBlockchains.get(blockchainIndex))) {
                 NodesValidated.add(newblock.getDigitalSignature());
+                System.out.println("LOG: Node "+ this.index +" has decided that block "+ newblock.getDigitalSignature()+ " is valid.");
                 return true;
             } else {
                 localBlockchains.get(blockchainIndex).getBlocks().remove(newblock);
+                System.out.println("LOG: Node "+ this.index +" has decided that block "+ newblock.getDigitalSignature()+ " is NOT valid.");
                 return false;
             }
         }catch (Exception e){
@@ -179,6 +194,7 @@ public class Node {
     }
 
     public void increaseTrust(int index,float v) {
+        System.out.println("LOG: Node "+this.index+" has gained trust");
         for(int j = 0; j < NodeNum; j++){
             if (j == index){
                 trust.set(j, trust.get(j) + v);
@@ -190,6 +206,7 @@ public class Node {
     }
 
     public void decreaseTrust(int index,float v) {
+        System.out.println("LOG: Node "+this.index+" has lost trust");
         if(trust.get(index) <= v){
             trust.set(index, 0.0F);
         }

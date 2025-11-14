@@ -45,9 +45,12 @@ public class BlockchainImpl implements Blockchain {
 
     @Override
     public void editBlock(String hash, List<String> newTestData) {
-        Block block = getBlock(hash);
-
-        block.setData(newTestData);
+        try{
+            Block block = getBlock(hash);
+            block.setData(newTestData);
+        }catch (NullPointerException e){
+            System.out.println("WARNING: When Looking for hash: "+hash+" no such hash was found");
+        }
     }
 
     @Override

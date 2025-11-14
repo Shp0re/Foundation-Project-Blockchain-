@@ -69,14 +69,20 @@ public class NodeGroup {
 
     public boolean checkNewBlock(Block newBlock, String index) {
         setWitnesses();
+        System.out.println(STR."LOG: Block \{newBlock.getDigitalSignature()} is being validated for addition.");
         for (Node witness : witnesses){
+            System.out.println(STR."LOG: Node \{witness.getindex()} is now validating the block");
             if (!witness.isNewBlockValid(newBlock,index)){
+                System.out.println("LOG: Block: "+newBlock.getDigitalSignature()+" has been found to be FALSE.\n");
                 return false;
             }
         }
         setBlockchain(witnesses.getFirst().getLocalBlockchain(index),index);
         rewardWitnesses();
         rewardVoters();
+        //localBlockchains.get(blockchainIndex).getBlocks().add(newblock);
+        blockchains.get(index).getBlocks().add(newBlock);
+        System.out.println("LOG: Block: "+newBlock.getDigitalSignature()+" has been found to be VALID.\n");
         return true;
     }
 
@@ -128,6 +134,17 @@ public class NodeGroup {
         witnesses = new ArrayList<Node>(nodes);
         Sortnodes();
         witnesses = witnesses.subList(0, NodeNum/2 - 1);
+    }
+
+    public void validateAll(){
+        this.blockchains.forEach((key,value) -> {
+            if (!ValidateBlockchain(key)){
+                System.out.println("WARNING: blockchain: "+key+ "has failed validation");
+            }else{
+                System.out.println("LOG: blockchain: "+key+" has passed validation");
+            }
+        });
+        System.out.println("LOG: All Blockchains validated");
     }
 
     private void Sortnodes() {

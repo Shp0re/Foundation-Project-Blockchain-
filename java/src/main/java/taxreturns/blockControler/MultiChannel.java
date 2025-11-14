@@ -46,6 +46,8 @@ public class MultiChannel implements Channel {
        }
     }
 
+
+
     @Override
     public String getID() {
         return this.id;
@@ -58,4 +60,6 @@ public class MultiChannel implements Channel {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }

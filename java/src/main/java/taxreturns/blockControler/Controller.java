@@ -2,6 +2,8 @@ package main.java.taxreturns.blockControler;
 import Node.NodeGroup;
 import main.java.taxreturns.blockchain.Block;
 import main.java.taxreturns.blockchain.BlockchainImpl;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.common.DataValidationException;
+
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -50,6 +52,17 @@ public class Controller{
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void addOrganisation(MultiChannel newOrg){
+        if(orgMap.containsKey(newOrg.getID())){
+            throw new DataValidationException("ERROR: Organisation reference is already in use");
+        } else if(orgMap.containsValue(newOrg)) {
+            throw new DataValidationException("ERROR: Organisation already exists within controller");
+        }else{
+            orgMap.put(newOrg.getID(), newOrg);
+            System.out.println(STR."LOG: Organisation \{newOrg.getID()} has been sucsessfuly added to the system");
         }
     }
 
@@ -106,6 +119,10 @@ public class Controller{
             account.addBlock(new Block(Long.parseLong(transactionData[1]), transactionInfo), transactionData[0]);
         }
     }
+
+
+
+
 
 
 }
